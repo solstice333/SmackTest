@@ -3,6 +3,8 @@ package jabber.smack.api;
 import java.io.File;
 import java.util.Collection;
 
+import org.jivesoftware.smack.ChatManager;
+import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
@@ -17,7 +19,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferNegotiator;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
-public class JabberSmackAPI implements MessageListener, PacketListener {
+public class JabberSmackAPI implements MessageListener, PacketListener, ChatManagerListener {
    private XMPPConnection conn;
    private FileTransferManager ftm;
 
@@ -28,6 +30,8 @@ public class JabberSmackAPI implements MessageListener, PacketListener {
       conn = new XMPPConnection(config);
       conn.connect();
       conn.login(username, password);
+      ChatManager cm = conn.getChatManager();
+      cm.addChatListener(this);
 
       return conn;
    }
@@ -151,5 +155,11 @@ public class JabberSmackAPI implements MessageListener, PacketListener {
       catch (InterruptedException e) {
          e.printStackTrace();
       }
+   }
+
+   @Override
+   public void chatCreated(Chat chat, boolean createdLocally) {
+      if(!createdLocally)
+         chat.addMessageListener(this);
    }
 }
