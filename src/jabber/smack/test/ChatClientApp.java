@@ -41,7 +41,7 @@ public class ChatClientApp {
                System.exit(0);
             }
 
-            if (to.equals("refresh")) {
+            else if (to.equals("refresh")) {
                valid = false;
                j.displayBuddyList();
                System.out.println("------------------------");
