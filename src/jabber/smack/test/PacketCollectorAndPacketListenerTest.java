@@ -31,12 +31,12 @@ public class PacketCollectorAndPacketListenerTest {
       PacketFilter filter = new AndFilter(new PacketTypeFilter(Message.class),
             new FromContainsFilter("openadrvtntest@gmail.com"));
 
-      // instantiate PacketCollector using filter (careful when using with
-      // PacketCollector, collisions and blocking exists)
+      // instantiate PacketCollector using filter (careful when using listener with collector. 
+      // Collector waits till a dequeue while listener is instant event driven)
       PacketCollector myCollector = connection.createPacketCollector(filter);
 
-      // attach listener to connection (careful when using with PacketCollector,
-      // collisions and blocking exists)
+      // attach listener to connection (careful when using listener with collector. 
+      // Collector waits till a dequeue while listener is instant event driven.)
       // PacketListener myListener = (PacketListener) j;
       // connection.addPacketListener(myListener, filter);
 
