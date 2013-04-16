@@ -1,28 +1,26 @@
 package jabber.smack.test;
 
 import java.util.Scanner;
-
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-
 import jabber.smack.api.JabberSmackAPI;
 
 public class ChatClientApp {
+   static String username, password;
+   static JabberSmackAPI j = new JabberSmackAPI();
 
    public static void main(String[] args) throws XMPPException,
          InterruptedException {
-      JabberSmackAPI j = new JabberSmackAPI();
-      
+
       @SuppressWarnings("resource")
       Scanner s = new Scanner(System.in);
-      
+
       String msg = "";
       String to = null;
       boolean valid = false, repeat = true;
 
-      //XMPPConnection.DEBUG_ENABLED = true;
-
-      j.login("knavero@gmail.com", "Hs200oo,");
+      // XMPPConnection.DEBUG_ENABLED = true;
+      loginProcedure();
+      connect();
 
       while (repeat) {
          j.displayBuddyList();
@@ -57,7 +55,7 @@ public class ChatClientApp {
          }
 
          System.out.println("---------------------------");
-         System.out.println("All messages will be sent to: " + to + ", " 
+         System.out.println("All messages will be sent to: " + to + ", "
                + j.getConnection().getRoster().getEntry(to).getName()
                + "\nType 'quit()' to quit"
                + "\nEnter the message in the console: ");
@@ -74,7 +72,7 @@ public class ChatClientApp {
          boolean invalidChoice = true;
          System.out.println("Choose different buddy to talk to? (y/n):");
          ans = s.nextLine().charAt(0);
-         
+
          while (invalidChoice) {
             invalidChoice = false;
             switch (ans) {
@@ -95,6 +93,35 @@ public class ChatClientApp {
       j.disconnect();
       System.out.println("Quitting...");
       System.exit(0);
+   }
+
+   private static void loginProcedure() {
+      Scanner s = new Scanner(System.in);
+
+      System.out.println("login: ");
+      System.out.print("   username: ");
+      username = s.next();
+      System.out.print("   password: ");
+      password = s.next();
+   }
+
+   private static boolean connect() {
+      boolean pass = false;
+
+      while (!pass) {
+         try {
+            j.login(username, password);
+            return true;
+         }
+         catch (XMPPException e) {
+            System.out.println("Login error. Invalid username or password."
+                  + "\nTry again:");
+            loginProcedure();
+            pass = connect();
+         }
+      }
+
+      return pass;
    }
 
 }
