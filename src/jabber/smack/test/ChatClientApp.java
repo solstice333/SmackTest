@@ -1,6 +1,8 @@
 package jabber.smack.test;
 
 import java.util.Scanner;
+
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import jabber.smack.api.JabberSmackAPI;
 
@@ -18,7 +20,7 @@ public class ChatClientApp {
       String to = null;
       boolean valid = false, repeat = true;
 
-      // XMPPConnection.DEBUG_ENABLED = true;
+      XMPPConnection.DEBUG_ENABLED = true;
       loginProcedure();
       connect();
 
@@ -96,6 +98,7 @@ public class ChatClientApp {
    }
 
    private static void loginProcedure() {
+      @SuppressWarnings("resource")
       Scanner s = new Scanner(System.in);
 
       System.out.println("login: ");
